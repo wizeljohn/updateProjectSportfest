@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1"> 
+		<link rel="stylesheet" type="text/css" href="css/jquery.mobile.flatui.css" />
+		<script src="js/jquery.js"></script>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/jquery.mobile-1.4.0-rc.1.js"></script>
+		<script src="js/responsiveImg.js"> </script>
+
+
+		<script>
+			$("#ImgCahs").responsiveImg();
+			$("#ImgCcs").responsiveImg();
+			$("#ImgCba").responsiveImg();
+			$("#ImgCeas").responsiveImg();
+
+			  // This is called with the results from from FB.getLoginStatus().
+			  function statusChangeCallback(response) {
+			    console.log('statusChangeCallback');
+			    console.log(response);
+			    // The response object is returned with a status field that lets the
+			    // app know the current login status of the person.
+			    // Full docs on the response object can be found in the documentation
+			    // for FB.getLoginStatus().
+			    if (response.status === 'connected') {
+			      // Logged into your app and Facebook.
+			      testAPI();
+			    } else if (response.status === 'not_authorized') {
+			      // The person is logged into Facebook, but not your app.
+			      document.getElementById('status').innerHTML = 'Please log ' +
+			        'into this app.';
+			    } else {
+			      // The person is not logged into Facebook, so we're not sure if
+			      // they are logged into this app or not.
+			      document.getElementById('status').innerHTML = 'Please log ' +
+			        'into Facebook.';
+			    }
+			  }
+
+			  // This function is called when someone finishes with the Login
+			  // Button.  See the onlogin handler attached to it in the sample
+			  // code below.
+			  function checkLoginState() {
+			    FB.getLoginStatus(function(response) {
+			      statusChangeCallback(response);
+			    });
+			  }
+
+			  window.fbAsyncInit = function() {
+			  FB.init({
+			    appId      : '1595349794062062',
+			    cookie     : true,  // enable cookies to allow the server to access 
+			                        // the session
+			    xfbml      : true,  // parse social plugins on this page
+			    version    : 'v2.3' // use version 2.2
+			  });
+
+			  // Now that we've initialized the JavaScript SDK, we call 
+			  // FB.getLoginStatus().  This function gets the state of the
+			  // person visiting this page and can return one of three states to
+			  // the callback you provide.  They can be:
+			  //
+			  // 1. Logged into your app ('connected')
+			  // 2. Logged into Facebook, but not your app ('not_authorized')
+			  // 3. Not logged into Facebook and can't tell if they are logged into
+			  //    your app or not.
+			  //
+			  // These three cases are handled in the callback function.
+
+			  FB.getLoginStatus(function(response) {
+			    statusChangeCallback(response);
+			  });
+
+			  };
+
+			  // Load the SDK asynchronously
+			  (function(d, s, id) {
+			    var js, fjs = d.getElementsByTagName(s)[0];
+			    if (d.getElementById(id)) return;
+			    js = d.createElement(s); js.id = id;
+			    js.src = "//connect.facebook.net/en_US/sdk.js";
+			    fjs.parentNode.insertBefore(js, fjs);
+			  }(document, 'script', 'facebook-jssdk'));
+
+			  // Here we run a very simple test of the Graph API after login is
+			  // successful.  See statusChangeCallback() for when this call is made.
+			  function testAPI() {
+			    console.log('Welcome!  Fetching your information.... ');
+			    FB.api('/me', function(response) {
+			      console.log('Successful login for: ' + response.name);
+			      document.getElementById('status').innerHTML =
+			        'Thanks for logging in, ' + response.name + '!';
+			    });
+			  }
+
+			$(document).ready(function(){
+			
+				$('#ImgCcs').click(function(){
+					window.location.href = "ccs.html";
+				});
+
+				$('#ImgCahs').click(function(){
+					window.location.href = "cahs.html";
+				});
+
+				$('#ImgCba').click(function(){
+					window.location.href = "cba.html";
+				});
+
+				$('#ImgCeas').click(function(){
+					window.location.href = "ceas.html";
+				});
+
+				//===================================== Function for Schedule====================================================
+				$.ajax({
+					type: 'GET',
+					url:'schedule.php',
+					dataType: 'html',
+					data: {},
+					success: function(data){
+						if(data){
+				$('#divSchedule').html(data);
+						}
+					}
+				});
+				//====================================End of function Schedule==================================================
+
+				//=================================== Function for Log in ======================================================
+				$('#btnLogin').click(function(){
+					$.ajax({
+						type:'GET',
+						url:'login.php',
+						dataType:'html',
+						data:$('#homeLogin').serialize(),
+						success:function(data){
+							alert(data);
+							if(data == 'welcome'){
+								$('#txtLogUsername').val("");
+								$('#txtLogPassword').val("");
+								location.href = 'index.html#ByPassLogin';
+							}
+							else{
+								$('#txtLogUsername').val("");
+								$('#txtLogPassword').val("");
+							}
+						}
+					});
+				});
+				//================================== End of Function Log in =====================================================
+
+				//==================================Function for Register =======================================================
+
+				$('#btnRegister').click(function(){
+				$.ajax({
+					type: 'POST',
+					url:'register.php',
+					data: $('#frmRegister').serialize(),
+					success: function(data){
+						if(data == 'You have Register'){
+							alert("You have Successfully Register");
+							location.href = 'index.html#ByPassLogin';
+						}
+					}
+				});
+				});
+
+				//==================================End of Function Register ====================================================
+
+			});
+
+
+		</script>	
+	
+	</head>
+	
+	<body> 
+			<!-- Start of index  -->
+			<div data-role="page" id="index" data-theme="b" data-transition="slide">
+				<!-- header -->
+				<div data-role="header" data-position="fixed">
+					<h1></h1>
+				</div><!-- End of Header -->
+				
+				<!-- content -->
+				<div data-role="content">
+					<br><br><br><br>
+						<form id="homeLogin">
+							<input type="text" placeholder="Email or Number" name="txtLogUsername" id="txtLogUsername">
+							<input type="password" placeholder="Password" name="txtLogPassword" id="txtLogPassword">
+						</form>
+						<button id="btnLogin" name="btnLogin" data-theme="a">Login</button>
+						
+					<a data-role ="button" data-rel="popup" href="#popupRegister" data-theme="a"> Register </a>	
+					<center><a href="#popupSkip" data-rel="popup" data-theme="b">Skip Login</a>
+					<fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+					</fb:login-button>
+				</div><!-- End of Content -->
+				
+				<!-- popup Register -->
+				<div data-role="popup" id="popupRegister" >
+					<div data-role="header">
+						<h1>Register</h1>
+					</div>
+					<!-- content -->
+					<div data-role="content" role="main">
+						<!-- ====================         user form            ======================================-->
+						<form id="frmRegister">
+							<input type="text" placeholder="Email or Number" id="txtUsername" name="txtUsername" required/>
+							<input type="password" placeholder="Password" id="txtPassword" name="txtPassword" required/>
+							<input type="password" placeholder="Confirm Password" id="txtConfirm" required/>
+							<br>
+							<hr>
+
+							<center><legend>Select Department</legend>
+								<fieldset data-role="controlgroup" data-type="horizontal" id = "deptrad" data-theme="a">
+								     	<input type="radio" name="radDepartment" id ="radcba" value="CBA" required/>
+								     	<label for="radcba">CBA</label>
+
+								     	<input type="radio" name="radDepartment" id ="radccs" value="CCS"  required/>
+								     	<label for="radccs">CCS</label>
+
+								     	<input type="radio" name="radDepartment" id ="radcahs"value="CAHS"  required/>
+								     	<label for="radcahs">CAHS</label>
+
+								     	<input type="radio" name="radDepartment" id ="radceas"value="CEAS"  required/>
+								     	<label for="radceas">CEAS</label>
+								</fieldset>
+
+								<div align="center">
+									<a data-role="button" data-inline="true" href="#index">Cancel</a>
+									<input type="submit" data-inline="true" data-theme="a" id="btnRegister" value="Register Account"/>
+								</div>
+						</form>
+						<!-- ====================       end  user form            ======================================-->
+					</div><!-- End of Content -->
+
+				</div><!-- End of Popop  -->
+
+				<!-- pupop container BYPASS -->
+				<div data-role="popup" id="popupSkip" >
+					
+					<div data-role="header" >
+						<h1>Skip Login?</h1>
+					</div>
+
+					<div data-role="content" role="main">
+						<p>Skipping Login prevent you to <b><i>POST</i></b> or <b><i>COMMENT</i></b>. <p>This is serves you as viewing purposes only.</p></p><p>Are you sure do you want to skip Login?</p>
+						<div align="right">
+							<a data-role="button" data-mini="true" data-inline="true" href="#index" data-theme="a">Cancel</a>
+							<a data-role="button" data-mini="true" data-inline="true" href="#ByPassLogin" data-theme="a">Agree</a>
+						</div>
+					</div>
+				</div><!-- End of Popop  -->
+				<!-- footer -->
+				<div data-role="footer" data-position="fixed">
+						<h1>&copyCopyright2015</h1>
+				</div><!--  End of footer -->
+			</div><!-- End of page index -->
+			
+			<!--Start of Home -->
+			<div data-role="page" id="ByPassLogin" data-theme="b">
+				<div data-role="header" data-position="fixed"><a data-icon="home" href="#index" id="btnLogout">Logout</a>
+				<h1>Welcome Guest</h1>
+				</div>
+				<!-- Start of Department Menu -->
+				<div data-role="main" class="ui-content">
+				    <div class="ui-grid-a ui-responsive">
+				     
+				      <div class="ui-block-a">
+				       <center> <input type="image" src="image/cahs.png" id="ImgCahs" style="max-width:100%;"> </center>
+				      </div>
+
+				      <div class="ui-block-b" id="ccs">
+				        <center> <input type="image" src="image/ccs.png" id="ImgCcs"  style="max-width:100%;"/ > </center>
+				      </div>
+
+				      <div class="ui-block-a">
+				       <center> <input type="image" src="image/cba.png" id="ImgCba" style="max-width:100%;"> </center>
+				      </div>
+
+				      <div class="ui-block-b">
+				        <center> <input type="image" src="image/ceas.png" id="ImgCeas" style="max-width:100%;"> </center>
+				      </div>
+
+				    </div>
+			     </div>
+			     <!--End of Department Menu-->
+				
+				<!--Start of navfooter-->
+				<div data-role="footer" data-position="fixed" data-theme="a">
+					<div data-role="navbar" >
+						<ul>
+						<li> <a href="#HistoryPage"  data-theme="a" data-icon="flat-time">HISTORY</a></li>
+						<li> <a href="#RulesRegulation"  data-theme="a" data-icon="flat-menu">RULES and REGULATION</a></li>
+						<li> <a href="#PageSchedule"  data-theme="a" data-icon="flat-calendar">SCHEDULE</a></li>
+						<li> <a href="#PageAbout"  data-theme="a" data-icon="info">ABOUT</a></li>
+						</ul>
+					</div>
+				</div>
+				<!--End of Navfooter-->
+			</div>
+			<!-- End of Home page -->
+
+
+			<!--============================================Start of History=========================================================== -->
+			<div data-role="page" id="HistoryPage" >
+				
+				<div data-role="header" data-position="fixed" data-theme="b"> 
+					<a data-icon="home" href="#ByPassLogin" id="btnHome">HOME</a>
+					<h1>HISTORY</h1>
+				</div>
+
+				<div data-role="content" role="main">
+					<h3>History</h3>
+						<p>History ng nakaraang sportfest.</p>
+				</div>
+
+				<div data-role="footer" data-position="fixed" data-theme="a">
+					<div data-role="navbar">
+						<ul>
+						<li> <a href="#"  data-theme="a" data-icon="flat-time">HISTORY</a></li>
+						<li> <a href="#RulesRegulation"  data-theme="a" data-icon="flat-menu">RULES and REGULATION</a></li>
+						<li> <a href="#PageSchedule"  data-theme="a" data-icon="flat-calendar">SCHEDULE</a></li>
+						<li> <a href="#PageAbout"  data-theme="a" data-icon="info">ABOUT</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!-- =========================================End of history page=========================================================-->
+
+
+			<!--============================================Start of Rules and Regulation============================================ -->
+			<div data-role="page" id="RulesRegulation">
+				
+				<div data-role="header" data-position="fixed" data-theme="b"> 
+					<a data-icon="home" href="#ByPassLogin" id="btnHome">HOME</a>
+					<h1>RULES AND REGULATION</h1>
+				</div>
+
+				<div data-role="content" role="main">
+					<h3>RULES AND REGULATIONS FOR THE SPORTSFEST</h3>
+
+					<h4> Tournament </h4>
+						<ol> 
+							<li>Sportsfest rules, as set by the committees, shall be implemented throughout the Sportsfest schedules unless amended by the technical committee.</li>
+							<li>Rendering of decisions and interpretations, as to the application of game rule, shall be the prerogative of the designated official game officials.</li>
+							<li>In the event if any question or matter arising out of any point, which is not expressly provided for in any of the rules of the game, the decision of the official referee shall be final.</li>
+						</ol>
+
+					<hr>
+					<h4>Protest</h4>
+						<p>Official protest shall be done in writing within 2 hours after the game.  It shall be addressed to the grievance committee (IHK Head, Sports Coordinator and OSS Head, Game Coordinators and Team Advisers) and shall be signed by both the team captain and team adviser. After critical deliberation and evaluation, as to the merits of the protest, the committee shall render its decision two (2) hours after the receipt of the protest.</p>
+
+					<hr>
+					<h4>Default</h4>
+						<p>TEAM Events: A team that fails to show - up the required number of players to start the game ten (10) minutes after the designated game schedule shall be declared loser by default. <br>
+						INDIVIDUAL Events: An individual who fails to show - up ten (10) minutes after the designated game schedule shall be declared loser by default.
+						</p>
+
+					<hr>
+					<h4>Suspension of Players</h4>
+						<p>Any player officially sanctioned, by the SportsFest technical committee for roughness or unsportsmanlike conduct shall be suspended and/or barred from participating in all events during the SportsFest. <br>
+						The same rule applies to coaches and other official members of any team who have been sanctioned for having committed "acts unbecoming of official."
+						</p>
+
+					<hr>
+					<h4> Uniform</h4>
+						<ol>
+							<li> All game participants are required to wear their official uniform during the game. </li>
+
+							<li> Official t-shirt and short pants shall constitute the official uniform. </li>
+
+							<li> The official t-shirt shall be designated as follows: team logo and name be placed in any part of the shirt, the color of which shall be in accordance with the agreed team color. </li>
+						</ol>
+
+
+					<hr>
+					<h4>Qualification of Participants</h4>
+						<p>Only bona fide GC students, faculty members, and staff will be allowed to represent their respective teams.</p>
+
+					<hr>
+					<h4>Point system</h4>
+						<p>The point system will be utilized. The core medal system shall be as follows:</p>
+						<ol>
+								<li> <b> <u>For Team </u> </b> with participating members of more than 2 will be considered as Major Events, <b> 20 points </b> will be given to the champion, the points for the second; third, fourth placers shall be as follows: <b>15 points </b> for the second placer, 10 points for the third placer,<b> 5 points </b> for the fourth placer. <b>Default = 0 </b> (no entry) whereas dual events will  be given <b> 12 points </b> to the champion, <b> 10 points</b> to the second placer, <b>8 points</b> to the third placer and <b> 6 points </b> to the fourth placer.</li>
+
+								<li> <b> <u> For Individual </u> </b>as Minor Events, <b>10 points </b>will be given to the champion, for the second; third, fourth placers shall be as follows: <b> 8 points </b> for the second placer, <b>6 points </b> for the third placer, <b> 4 points </b> for the fourth placer.<b>Default = 0</b> (no entry).</li>
+
+						</ol>
+				</div>
+
+				<div data-role="footer" data-position="fixed" data-theme="a">
+					<div data-role="navbar">
+						<ul>
+						<li> <a href="#HistoryPage"  data-theme="a" data-icon="flat-time">HISTORY</a></li>
+						<li> <a href="#"  data-theme="a" data-icon="flat-menu">RULES and REGULATION</a></li>
+						<li> <a href="#PageSchedule"  data-theme="a" data-icon="flat-calendar">SCHEDULE</a></li>
+						<li> <a href="#PageAbout"  data-theme="a" data-icon="info">ABOUT</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!-- =========================================End of Rules and Rugulation=============================================-->
+
+
+			<!--============================================Start of Schedule============================================ -->
+			<div data-role="page" id="PageSchedule" data-theme="b">
+				
+				<div data-role="header" data-position="fixed"> <a data-icon="home" href="#ByPassLogin" id="btnHome">HOME</a>
+					<h1>SCHEDULE</h1>
+				</div>
+
+				<div data-role="content" role="main">
+						<div id="divSchedule">
+						</div>
+				</div>
+
+
+				<div data-role="footer" data-position="fixed" data-theme="a">
+					<div data-role="navbar">
+						<ul>
+						<li> <a href="#HistoryPage"  data-theme="a" data-icon="flat-time">HISTORY</a></li>
+						<li> <a href="#RulesRegulation"  data-theme="a" data-icon="flat-menu">RULES and REGULATION</a></li>
+						<li> <a href="#"  data-theme="a" data-icon="flat-calendar">SCHEDULE</a></li>
+						<li> <a href="#PageAbout"  data-theme="a" data-icon="info">ABOUT</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!-- =========================================End of Schedule=============================================-->
+
+
+			<!--============================================Start of About============================================ -->
+			<div data-role="page" id="PageAbout" data-theme="b">
+				
+				<div data-role="header" data-position="fixed"> <a data-icon="home" href="#ByPassLogin" id="btnHome">HOME</a>
+					<h1>ABOUT</h1>
+				</div>
+
+				<div data-role="content" role="main">
+						<h3>About Mobile Application</h3>
+				</div>
+
+				<div data-role="footer" data-position="fixed" data-theme="a">
+					<div data-role="navbar">
+						<ul>
+						<li> <a href="#HistoryPage"  data-theme="a" data-icon="flat-time">HISTORY</a></li>
+						<li> <a href="#RulesRegulation"  data-theme="a" data-icon="flat-menu">RULES and REGULATION</a></li>
+						<li> <a href="#PageSchedule"  data-theme="a" data-icon="flat-calendar">SCHEDULE</a></li>
+						<li> <a href="#"  data-theme="a" data-icon="info">ABOUT</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!-- =========================================End of About=============================================-->
+
+
+
+	</body>
+
+
+</html>
